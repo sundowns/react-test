@@ -7,22 +7,25 @@ class Loader extends React.Component {
    }
 
    componentDidMount() {
+      this._mounted = true;
       this.timerID = setInterval(() => this.tick(), 400);
    }
 
+   componentWillUnmount() {
+      this._mounted = false;
+   }
+
    tick() {
-      this.setState({ellipses: this.state.ellipses + '.'});
-      if (this.state.ellipses.length > 3) {
-         this.setState({ellipses: ''});
+      if (this._mounted) {
+         this.setState({ellipses: this.state.ellipses + '.'});
+         if (this.state.ellipses.length > 3) {
+            this.setState({ellipses: ''});
+         }
       }
    }
 
    render() {
-      if (this.props.loading) {
-         return <div className="loader">Loading{this.state.ellipses}</div>
-      } else {
-         return null;
-      }
+      return <div className="loader">Loading{this.state.ellipses}</div>
    }
 }
 

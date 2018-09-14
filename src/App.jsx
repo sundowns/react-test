@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import './App.css';
-import Loader from './component/loader.jsx';
-import Movie from './component/movie.jsx';
+import LoadedMovies from './container/loadedmovies.jsx';
 
 class App extends Component {
    constructor() {
@@ -24,7 +23,7 @@ class App extends Component {
          //Delayed state update as API is too fast to demo loading state
          setTimeout(() => {
             this.setState({loading: false})
-         }, 1200);
+         }, 1000);
       }, (err) => {
          this.setState({loading: false});
          console.log(err);
@@ -48,15 +47,7 @@ class App extends Component {
             <h1>Incredible Movie Listing Service</h1>
             <div className="items-container">
                <div className="fetch-data" onClick={this.fetchData}>Retrieve Movies</div>
-               <Loader loading={this.state.loading}/>
-               {!this.state.loading && this.state.movies.length > 0 &&
-                  <ul className="movie-list">
-                     {this.state.movies.map(function(m) {
-                        return <Movie title={m.title} releaseYear={m.releaseYear} key={m.id}/>
-                     })}
-                  </ul>
-               }
-
+               <LoadedMovies />
             </div>
          </div>
       );
