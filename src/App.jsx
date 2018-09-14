@@ -1,27 +1,34 @@
 import React, { Component } from 'react';
 import './App.css';
+import Loader from './component/loader.jsx';
 import Movie from './component/movie.jsx';
 
 class App extends Component {
    constructor() {
       super();
-      this.state = { movies: [], loading : false }
+      this.state = {
+         movies: [],
+         loading : false
+      }
       this.fetchData = this.fetchData.bind(this);
    }
 
    fetchData() {
       this.setState({loading: true});
-      console.log("fetchinggggggggggggggg");
 
-      //TODO: Resolve issue with CORS requests. The correct headers are returned in Post man, why arent they being returned here?
-      // this.getMoviesFromApiAsync().then((data) => {
-      //    console.log(data);
-      //    if (data) {
-      //       this.setState({movies: data});
-      //    }
-      // }, (err) => {
-      //    console.log(err);
-      // });
+      this.getMoviesFromApiAsync().then((data) => {
+         if (data) {
+            this.setState({movies: data});
+         }
+
+         //Delayed state update as API is too fast to demo loading state
+         setTimeout(() => {
+            this.setState({loading: false})
+         }, 1200);
+      }, (err) => {
+         this.setState({loading: false});
+         console.log(err);
+      });
    }
 
    getMoviesFromApiAsync() {
@@ -38,14 +45,12 @@ class App extends Component {
    render() {
       return (
          <div className="App">
-            <div className="movie">
-               <h1>Incredible Movie Listing Service</h1>
-               <button onClick={this.fetchData}>Fetch</button>
-               {this.state.loading &&
-                  <div>Loading...</div>
-               }
-               {!this.state.loading &&
-                  <ul>
+            <h1>Incredible Movie Listing Service</h1>
+            <div className="items-container">
+               <div className="fetch-data" onClick={this.fetchData}>Retrieve Movies</div>
+               <Loader loading={this.state.loading}/>
+               {!this.state.loading && this.state.movies.length > 0 &&
+                  <ul className="movie-list">
                      {this.state.movies.map(function(m) {
                         return <Movie title={m.title} releaseYear={m.releaseYear} key={m.id}/>
                      })}
