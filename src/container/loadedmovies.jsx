@@ -1,5 +1,6 @@
 import { connect } from 'react-redux';
 import Movies from '../component/movies.jsx';
+import { fetchData } from '../action/fetchdata';
 
 const mapStateToProps = state => {
    return {
@@ -9,8 +10,8 @@ const mapStateToProps = state => {
 }
 
 const mapDispatchToProps = dispatch => ({
-  toggleLoading: id => dispatch({type: 'TOGGLE_LOADING'})
-});
+   fetchData: () => dispatch(fetchData())
+})
 
 export default connect(
   mapStateToProps,
